@@ -65,15 +65,15 @@ extension ViewController: WKScriptMessageHandler {
                     } else if action == "call", let function = dictionary["function"] {
                         var returnMessage = ""
                         if function == "returnFunction" {
-                            returnMessage = "나는 선택받은 function이다."
+                            returnMessage = "휴대폰에서 보내는 메세지"
                         }
-                        
                         webView.evaluateJavaScript("\(function)('\(returnMessage)')", completionHandler: nil)
                     }
                 }
             } else if let message = message.body as? String {
                 if message == "getMessage" {
-                    webView.evaluateJavaScript("returnMessage('나는 function에 호출된 녀석입니다.');", completionHandler: nil)
+                    webView.evaluateJavaScript("returnMessage('스크립트에서 실행을 요청한 메세지');",
+                                               completionHandler: nil)
                 }
             }
         }
