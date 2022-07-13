@@ -31,9 +31,6 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4JI-UY-pvJ" secondAttribute="trailing" id="kpn-hY-zob"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="webViewBackgroundView" destination="4JI-UY-pvJ" id="CKo-3v-AXX"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

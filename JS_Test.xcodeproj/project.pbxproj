@@ -13,7 +13,6 @@
 		97176746287E54470058509E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97176744287E54470058509E /* Main.storyboard */; };
 		97176748287E54480058509E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97176747287E54480058509E /* Assets.xcassets */; };
 		9717674B287E54480058509E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97176749287E54480058509E /* LaunchScreen.storyboard */; };
-		97176755287E57450058509E /* bridge.js in Resources */ = {isa = PBXBuildFile; fileRef = 97176753287E57450058509E /* bridge.js */; };
 		97176756287E57450058509E /* Example.html in Resources */ = {isa = PBXBuildFile; fileRef = 97176754287E57450058509E /* Example.html */; };
 /* End PBXBuildFile section */
 
@@ -26,7 +25,6 @@
 		97176747287E54480058509E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9717674A287E54480058509E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9717674C287E54480058509E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		97176753287E57450058509E /* bridge.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = bridge.js; sourceTree = "<group>"; };
 		97176754287E57450058509E /* Example.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Example.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -75,7 +73,6 @@
 		97176752287E57450058509E /* Web */ = {
 			isa = PBXGroup;
 			children = (
-				97176753287E57450058509E /* bridge.js */,
 				97176754287E57450058509E /* Example.html */,
 			);
 			path = Web;
@@ -140,7 +137,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9717674B287E54480058509E /* LaunchScreen.storyboard in Resources */,
-				97176755287E57450058509E /* bridge.js in Resources */,
 				97176748287E54480058509E /* Assets.xcassets in Resources */,
 				97176746287E54470058509E /* Main.storyboard in Resources */,
 				97176756287E57450058509E /* Example.html in Resources */,

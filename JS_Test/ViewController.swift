@@ -10,7 +10,6 @@ import WebKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var webViewBackgroundView: UIView!
     var webView: WKWebView!
         
     override func viewDidLoad() {
@@ -19,64 +18,64 @@ class ViewController: UIViewController {
         setWebView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        load()
-    }
-    
     func setWebView() {
         let contentController = WKUserContentController()
+        contentController.add(self, name: "test")
         
-        //Bridge 등록
-        contentController.add(self, name: "back")
-        contentController.add(self, name: "outLink")
+        let userScript = WKUserScript(source: "initNative()", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        contentController.addUserScript(userScript)
         
         let configuration = WKWebViewConfiguration()
         configuration.userContentController = contentController
         
-        webView = WKWebView(frame: .zero, configuration: configuration)
-        webViewBackgroundView.addSubview(webView)
+        webView = WKWebView(frame: view.frame, configuration: configuration)
+        webView.uiDelegate = self
+        view.addSubview(webView)
         
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.topAnchor.constraint(equalTo: webViewBackgroundView.topAnchor).isActive = true
-        webView.bottomAnchor.constraint(equalTo: webViewBackgroundView.bottomAnchor).isActive = true
-        webView.leadingAnchor.constraint(equalTo: webViewBackgroundView.leadingAnchor).isActive = true
-        webView.trailingAnchor.constraint(equalTo: webViewBackgroundView.trailingAnchor).isActive = true
+        let localFile = Bundle.main.path(forResource: "Example", ofType: "html") ?? "" // 반드시 존재하므로 그냥 처리
+        let url = URL(fileURLWithPath: localFile)
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
-    
-    func load() {
-        if let url = Bundle.main.url(forResource: "Example", withExtension: "html") {
-            webView.loadFileURL(url, allowingReadAccessTo: url)
+}
+
+extension ViewController: WKUIDelegate {
+    func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+        let alertController = UIAlertController(title: "test", message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "확인", style: .cancel) { _ in
+            completionHandler()
+        }
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true, completion: nil)
         }
     }
 }
 
 extension ViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        switch message.name {
-        case "back":
-            let alert = UIAlertController(title: nil, message: "Back 버튼 클릭", preferredStyle: .alert)
-            let action = UIAlertAction(title: "확인", style: .default, handler: nil)
-            alert.addAction(action)
-            self.present(alert, animated: true, completion: nil)
-        case "outLink":
-            guard let outLink = message.body as? String, let url = URL(string: outLink) else {
-                return
+        if message.name == "test" {
+            if let dictionary: [String: String] = message.body as? Dictionary {
+                if let action = dictionary["action"] {
+                    if action == "bind", let name = dictionary["name"] {
+                        if name == "message" {
+                            let dateString = Date().description
+                            webView.evaluateJavaScript("var \(name) = '\(dateString)';", completionHandler: nil)
+                        }
+                    } else if action == "call", let function = dictionary["function"] {
+                        var returnMessage = ""
+                        if function == "returnFunction" {
+                            returnMessage = "나는 선택받은 function이다."
+                        }
+                        
+                        webView.evaluateJavaScript("\(function)('\(returnMessage)')", completionHandler: nil)
+                    }
+                }
+            } else if let message = message.body as? String {
+                if message == "getMessage" {
+                    webView.evaluateJavaScript("returnMessage('나는 function에 호출된 녀석입니다.');", completionHandler: nil)
+                }
             }
-            
-            let alert = UIAlertController(title: "OutLink 버튼 클릭", message: "URL : \(outLink)", preferredStyle: .alert)
-            let openAction = UIAlertAction(title: "링크 열기", style: .default) { _ in
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-            alert.addAction(openAction)
-            alert.addAction(cancelAction)
-            
-            self.present(alert, animated: true, completion: nil)
-        default:
-            break
         }
     }
 }
-
